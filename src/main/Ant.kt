@@ -9,7 +9,8 @@ class Ant(var pointCurrent: Point = Point(0, 0),
 
     fun step() {
         stepCounter++
-        directionCurrent = directionNext()
+        val fieldColor = fields[pointCurrent] ?: FieldColor.WHITE
+        directionCurrent = directionCurrent.nextDirection(fieldColor)
         changeFieldColor(pointCurrent)
         println(this)
         pointCurrent = pointNext()
@@ -22,22 +23,8 @@ class Ant(var pointCurrent: Point = Point(0, 0),
         fields[point] = newColor.changeColor()
     }
 
-    private fun directionNext(): AntDirection {
-        val fieldColor = fields[pointCurrent] ?: FieldColor.WHITE
-        return when (directionCurrent) {
-            AntDirection.UP ->
-                if (fieldColor == FieldColor.WHITE) AntDirection.RIGHT else AntDirection.LEFT
-            AntDirection.DOWN ->
-                if (fieldColor == FieldColor.WHITE) AntDirection.LEFT else AntDirection.RIGHT
-            AntDirection.RIGHT ->
-                if (fieldColor == FieldColor.WHITE) AntDirection.DOWN else AntDirection.UP
-            AntDirection.LEFT ->
-                if (fieldColor == FieldColor.WHITE) AntDirection.UP else AntDirection.DOWN
-        }
-    }
-
     override fun toString(): String {
-        return "step: $stepCounter [point.x=${pointCurrent.x} ; point.y=${pointCurrent.y}] color=${fields[pointCurrent] ?: FieldColor.WHITE} direction=$directionCurrent directionNext=${directionNext()}"
+        return "step: $stepCounter [point.x=${pointCurrent.x} ; point.y=${pointCurrent.y}] color=${fields[pointCurrent] ?: FieldColor.WHITE} direction=$directionCurrent"
     }
 
     //for assertions in tests
