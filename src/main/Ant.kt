@@ -9,8 +9,7 @@ class Ant(var pointCurrent: Point = Point(0, 0),
 
     fun step() {
         stepCounter++
-        val fieldColor = fields[pointCurrent] ?: FieldColor.WHITE
-        directionCurrent = directionCurrent.nextDirection(fieldColor)
+        directionCurrent = changeDirection()
         changeFieldColor(pointCurrent)
         println(this)
         pointCurrent = pointNext()
@@ -21,6 +20,12 @@ class Ant(var pointCurrent: Point = Point(0, 0),
     private fun changeFieldColor(point: Point) {
         val newColor = fields[point] ?: FieldColor.WHITE
         fields[point] = newColor.changeColor()
+    }
+
+    private fun changeDirection(): AntDirection {
+        val fieldColor = fields[pointCurrent] ?: FieldColor.WHITE
+        return if (fieldColor == FieldColor.WHITE)
+            directionCurrent.changeDirectionIfWhiteColor() else directionCurrent.changeDirectionIfBlackColor()
     }
 
     override fun toString(): String {
